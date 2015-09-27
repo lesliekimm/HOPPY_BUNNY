@@ -3,6 +3,7 @@ import Foundation
 class MainScene: CCNode {
     // code connections
     weak var hero: CCSprite!                            // bunny
+    weak var gamePhysicsNode: CCPhysicsNode!            // game physics node
     
     // variables
     var sinceTouch: CCTime = 0
@@ -41,5 +42,7 @@ class MainScene: CCNode {
         
         // manipulate scroll speed of bunny
         hero.position = ccp(hero.position.x + scrollSpeed * CGFloat(delta), hero.position.y)
+        // move the physics node
+        gamePhysicsNode.position = ccp(gamePhysicsNode.position.x - scrollSpeed * CGFloat(delta), gamePhysicsNode.position.y)
     }
 }
