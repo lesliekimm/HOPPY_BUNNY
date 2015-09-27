@@ -17,7 +17,6 @@ class MainScene: CCNode {
         userInteractionEnabled = true                   // enable touch events
         grounds.append(ground1)                         // add ground1
         grounds.append(ground2)                         // add ground2
-        
     }
     
     // applies action to touch event
