@@ -4,7 +4,9 @@ class MainScene: CCNode {
     // code connections
     weak var hero: CCSprite!                            // bunny
     
+    // variables
     var sinceTouch: CCTime = 0
+    var scrollSpeed: CGFloat = 80
     
     // called every time CCB file is loaded
     func didLoadFromCCB() {
@@ -36,5 +38,8 @@ class MainScene: CCNode {
             let impulse = -18000.0 * delta
             hero.physicsBody.applyAngularImpulse(CGFloat(impulse))
         }
+        
+        // manipulate scroll speed of bunny
+        hero.position = ccp(hero.position.x + scrollSpeed * CGFloat(delta), hero.position.y)
     }
 }
