@@ -4,14 +4,20 @@ class MainScene: CCNode {
     // code connections
     weak var hero: CCSprite!                            // bunny
     weak var gamePhysicsNode: CCPhysicsNode!            // game physics node
+    weak var ground1: CCSprite!                         // ground 1
+    weak var ground2: CCSprite!                         // ground 2
     
     // variables
     var sinceTouch: CCTime = 0
     var scrollSpeed: CGFloat = 80
+    var grounds = [CCSprite]()                          // initialize empty array
     
     // called every time CCB file is loaded
     func didLoadFromCCB() {
         userInteractionEnabled = true                   // enable touch events
+        grounds.append(ground1)                         // add ground1
+        grounds.append(ground2)                         // add ground2
+        
     }
     
     // applies action to touch event
@@ -44,5 +50,14 @@ class MainScene: CCNode {
         hero.position = ccp(hero.position.x + scrollSpeed * CGFloat(delta), hero.position.y)
         // move the physics node
         gamePhysicsNode.position = ccp(gamePhysicsNode.position.x - scrollSpeed * CGFloat(delta), gamePhysicsNode.position.y)
+        
+        // loop the ground whenever a ground image is moved entirely outside the screen
+        for ground in grounds {
+            let groundWorldPosition = gamePhysicsNode.convertToWorldSpace(ground.position)
+            let groundScreenPosition = convertToNodeSpace(groundWorldPosition)
+            if groundScreenPosition.x <= (-ground.contentSize.width) {
+                ground.position = ccp(ground.position.x + ground.contentSize.width * 2, ground.position.y)
+            }
+        }
     }
 }
