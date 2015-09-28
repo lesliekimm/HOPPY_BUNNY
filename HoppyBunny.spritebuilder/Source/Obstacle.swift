@@ -8,6 +8,11 @@ class Obstacle : CCNode {
     let bottomCarrotMaximumPositionY : CGFloat = 440
     let carrotDistance : CGFloat = 142
     
+    func didLoadFromCCB() {
+        topCarrot.physicsBody.sensor = true
+        bottomCarrot.physicsBody.sensor = true
+    }
+    
     func setupRandomPosition() {
         let randomPrecision : UInt32 = 100
         let random = CGFloat(arc4random_uniform(randomPrecision)) / CGFloat(randomPrecision)
