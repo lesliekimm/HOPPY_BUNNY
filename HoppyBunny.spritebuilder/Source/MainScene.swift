@@ -67,6 +67,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         hero.position = ccp(hero.position.x + scrollSpeed * CGFloat(delta), hero.position.y)
         // move the physics node
         gamePhysicsNode.position = ccp(gamePhysicsNode.position.x - scrollSpeed * CGFloat(delta), gamePhysicsNode.position.y)
+        let scale = CCDirector.sharedDirector().contentScaleFactor
+        gamePhysicsNode.position = ccp(round(gamePhysicsNode.position.x * scale) / scale, round(gamePhysicsNode.position.y * scale) / scale)
+        hero.position = ccp(round(hero.position.x * scale) / scale, round(hero.position.y * scale) / scale)
         
         // loop the ground whenever a ground image is moved entirely outside the screen
         for ground in grounds {
