@@ -6,8 +6,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     weak var gamePhysicsNode: CCPhysicsNode!            // game physics node
     weak var ground1: CCSprite!                         // ground 1
     weak var ground2: CCSprite!                         // ground 2
-    weak var obstaclesLayer : CCNode!
-    weak var restartButton : CCButton!
+    weak var obstaclesLayer: CCNode!
+    weak var restartButton: CCButton!
+    weak var scoreLabel: CCLabelTTF!
     
     // variables
     var sinceTouch: CCTime = 0
@@ -15,6 +16,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var grounds = [CCSprite]()                          // initialize empty array
     var obstacles: [CCNode] = []
     var gameOver = false
+    var points : NSInteger = 0
     
     // constants
     let firstObstaclePosition: CGFloat = 280
@@ -108,6 +110,13 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, hero: CCNode!, level: CCNode!) -> Bool {
         triggerGameOver()
+        return true
+    }
+    
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, hero nodeA: CCNode!, goal: CCNode!) -> Bool {
+        goal.removeFromParent()
+        points++
+        scoreLabel.string = String(points)
         return true
     }
     
