@@ -6,17 +6,27 @@ class MainScene: CCNode {
     weak var gamePhysicsNode: CCPhysicsNode!            // game physics node
     weak var ground1: CCSprite!                         // ground 1
     weak var ground2: CCSprite!                         // ground 2
+    weak var obstaclesLayer : CCNode!
     
     // variables
     var sinceTouch: CCTime = 0
     var scrollSpeed: CGFloat = 80
     var grounds = [CCSprite]()                          // initialize empty array
+    var obstacles: [CCNode] = []
+    
+    // constants
+    let firstObstaclePosition: CGFloat = 280
+    let distanceBetweenObstacles: CGFloat = 160
     
     // called every time CCB file is loaded
     func didLoadFromCCB() {
         userInteractionEnabled = true                   // enable touch events
         grounds.append(ground1)                         // add ground1
         grounds.append(ground2)                         // add ground2
+        
+        for i in 0...2 {
+            spawnNewObstacle()
+        }
     }
     
     // applies action to touch event
@@ -58,5 +68,35 @@ class MainScene: CCNode {
                 ground.position = ccp(ground.position.x + ground.contentSize.width * 2, ground.position.y)
             }
         }
+        
+        for obstacle in obstacles.reverse() {
+            let obstacleWorldPosition = gamePhysicsNode.convertToWorldSpace(obstacle.position)
+            let obstacleScreenPosition = convertToNodeSpace(obstacleWorldPosition)
+            
+            // obstacle moved past left side of screen?
+            if obstacleScreenPosition.x < (-obstacle.contentSize.width) {
+                obstacle.removeFromParent()
+                // obstacles.removeAtIndex(find(obstacles, obstacle)!)
+                
+                // for each removed obstacle, add a new one
+                spawnNewObstacle()
+            }
+        }
+    }
+    
+    // spawn obstacles
+    func spawnNewObstacle() {
+        // get the previous obstacle's position
+        var prevObstaclePos = firstObstaclePosition
+        if obstacles.count > 0 {
+            prevObstaclePos = obstacles.last!.position.x
+        }
+        
+        // create and add a new obstacle
+        let obstacle = CCBReader.load("Obstacle") as! Obstacle
+        obstacle.position = ccp(prevObstaclePos + distanceBetweenObstacles, 0)
+        obstacle.setupRandomPosition()
+        obstaclesLayer.addChild(obstacle)
+        obstacles.append(obstacle)
     }
 }
